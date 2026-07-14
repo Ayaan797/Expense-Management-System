@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Panel</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+
+  <!-- ✅ Navbar with button-style center links -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid px-4 d-flex justify-content-between align-items-center flex-wrap">
+
+      <!-- Brand (left) -->
+      <a class="navbar-brand fw-bold text-white" th:href="@{#}">Expense Manager</a>
+
+      <!-- Center: Nav buttons styled like outlined buttons -->
+      <div class="d-flex gap-2 my-2 my-lg-0">
+        <a class="btn btn-outline-light" th:href="@{#}">Dashboard</a>
+        <a class="btn btn-outline-light" th:href="@{/reports}">Reports</a>
+        
+      </div>
+
+      <!-- Right: Logout -->
+      <a class="btn btn-outline-danger" th:href="@{/logout}">Logout</a>
+
+    </div>
+  </nav>
+
+  <!-- ✅ Main Content -->
+  <div class="container my-4">
+    <h3 class="mb-4">Admin Panel - Expense Approval</h3>
+
+    <table class="table table-bordered table-hover">
+      <thead class="table-dark">
+        <tr>
+          <th>User Email</th>
+          <th>Date</th>
+          <th>Category</th>
+          <th>Amount</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="expense : ${expenses}">
+          <td th:text="${expense.residentEmail}">email@gmail.com</td>
+          <td th:text="${#temporals.format(expense.date, 'yyyy-MM-dd HH:mm')}">Date</td>
+          <td th:text="${expense.category}">Travel</td>
+          <td th:text="${expense.amount}">120</td>
+          <td th:text="${expense.status}">Pending</td>
+          <td>
+            <form th:action="@{'/admin/approve/' + ${expense.id}}" method="post" style="display:inline;">
+              <button type="submit" class="btn btn-success btn-sm">Approve</button>
+            </form>
+            <form th:action="@{'/admin/reject/' + ${expense.id}}" method="post" style="display:inline;">
+              <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+            </form>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
